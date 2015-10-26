@@ -12,9 +12,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(required=True, write_only=True)
+
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name')
+        fields = ('email', 'first_name', 'last_name', 'password')
 
     def validate_password(self, value):
         instance = User()
