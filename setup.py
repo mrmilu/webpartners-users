@@ -11,7 +11,7 @@ def get_packages(package):
             if os.path.exists(os.path.join(dirpath, '__init__.py'))]
 
 setup(name='webpartners-users',
-      version='0.1.4',
+      version='0.1.5',
       description='Web Partners base user package',
       url='https://github.com/webpartners/webpartners-users',
       author='Jaime Herencia',
