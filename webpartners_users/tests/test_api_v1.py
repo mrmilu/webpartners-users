@@ -1,8 +1,10 @@
 from django.test import override_settings
+from django.urls import reverse
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 from test_plus.test import TestCase
-from django.core.urlresolvers import reverse
+
 from ..settings import DEFAULTS
 
 
@@ -47,10 +49,12 @@ class TestUserAPIV1(APITestCase, TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_detail(self):
+        # Anonymous request
         url = reverse('users:api-v1:user-detail', kwargs={'pk': self.user.pk})
         response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # Authenticated requests
         auth_client = self.get_auth_client()
         response = auth_client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -61,6 +65,7 @@ class TestUserAPIV1(APITestCase, TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update(self):
+        # Anonymous request
         data = {
             'first_name': 'Jorge',
             'last_name': 'Lorenzo',
@@ -68,8 +73,9 @@ class TestUserAPIV1(APITestCase, TestCase):
 
         url = reverse('users:api-v1:user-detail', kwargs={'pk': self.user.pk})
         response = self.client.patch(url, data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # Authenticated request
         auth_client = self.get_auth_client()
 
         response = auth_client.patch(url, data)
@@ -90,10 +96,12 @@ class TestUserAPIV1(APITestCase, TestCase):
         self.assertEqual(response.data['email'], 'test@example.com')
 
     def test_delete(self):
+        # Anonymous request
         url = reverse('users:api-v1:user-detail', kwargs={'pk': self.user.pk})
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+        # Authenticated request
         auth_client = self.get_auth_client()
         response = auth_client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

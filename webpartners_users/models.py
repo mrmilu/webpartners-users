@@ -6,31 +6,38 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
+
 from .settings import package_settings
 
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
-        now = timezone.now()
+    def _create_user(self, email, password, **extra_fields):
+        """
+        Create and save a user with the given email, and password.
+        """
         email = self.normalize_email(email)
-        user = self.model(email=email,
-                          is_staff=is_staff,
-                          is_active=True,
-                          is_superuser=is_superuser,
-                          date_joined=now,
-                          **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.full_clean()
         user.save(using=self._db)
         return user
 
     def create_user(self, username=None, email=None, password=None, **extra_fields):
-        return self._create_user(email, password, False, False, **extra_fields)
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, username=None, email=None, password=None, **extra_fields):
-        return self._create_user(email, password, True, True, **extra_fields)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self._create_user(email, password, **extra_fields)
 
 
 @python_2_unicode_compatible
@@ -47,13 +54,14 @@ class AbstractUser(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
+    EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     class Meta:
-        abstract = True
         verbose_name = _('user')
         verbose_name_plural = _('users')
+        abstract = True
 
     def __init__(self, *args, **kwargs):
         super(AbstractUser, self).__init__(*args, **kwargs)

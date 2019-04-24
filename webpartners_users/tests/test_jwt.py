@@ -1,8 +1,10 @@
 from django.test import override_settings
+from django.urls import reverse
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 from test_plus.test import TestCase
-from django.core.urlresolvers import reverse
+
 from ..settings import DEFAULTS
 
 

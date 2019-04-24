@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
+from django.contrib.auth import get_user_model
+
+from rest_framework import exceptions
 from rest_framework import viewsets
 from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from rest_framework import status
+
 from ..permissions.v1 import IsAdminOrIsSelf
 from ..serializers.v1 import UserSerializer, UserCreateSerializer, UserChangePasswordSerializer
-from ...models import User
-from rest_framework import status
+
+
+User = get_user_model()
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = None if User._meta.swapped else User.objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     serializer_class_create = UserCreateSerializer
     serializer_class_change_password = UserChangePasswordSerializer
@@ -29,7 +35,7 @@ class UserViewSet(viewsets.ModelViewSet):
             'destroy': (IsAdminUser, )
         }
 
-        if not self.action in permissions_list.keys():
+        if self.action not in permissions_list.keys():
             permissions = (IsAuthenticated, IsAdminOrIsSelf, )
         else:
             permissions = permissions_list.get(self.action)
