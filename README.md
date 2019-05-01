@@ -1,5 +1,10 @@
 # webpartners_users django package
 
+[![image](https://img.shields.io/pypi/v/webpartners_users.svg)](https://pypi.org/project/webpartners_users/)
+[![image](https://img.shields.io/pypi/l/webpartners_users.svg)](https://pypi.org/project/webpartners_users/)
+[![image](https://img.shields.io/pypi/pyversions/webpartners_users.svg)](https://pypi.org/project/webpartners_users/)
+[![image](https://img.shields.io/github/contributors/mrmilu/webpartners-users.svg)](https://github.com/mrmilu/webpartners-users/graphs/contributors)
+
 This package provides a combination of common functionalities for simple projects:
 - django user model without username field, email only is used. It also brings and AbstractUser subclass.
 - django_rest_framework views for user CRUD and change-password
