@@ -3,6 +3,7 @@
 [![image](https://img.shields.io/pypi/v/webpartners_users.svg)](https://pypi.org/project/webpartners_users/)
 [![image](https://img.shields.io/pypi/l/webpartners_users.svg)](https://pypi.org/project/webpartners_users/)
 [![image](https://img.shields.io/pypi/pyversions/webpartners_users.svg)](https://pypi.org/project/webpartners_users/)
+[![image](https://img.shields.io/pypi/djversions/webpartners_users.svg)](https://pypi.org/project/webpartners_users/)
 [![image](https://img.shields.io/github/contributors/mrmilu/webpartners-users.svg)](https://github.com/mrmilu/webpartners-users/graphs/contributors)
 
 This package provides a combination of common functionalities for simple projects:
